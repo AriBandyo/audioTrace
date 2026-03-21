@@ -128,7 +128,7 @@ AudioTrace targets the gap nobody is filling an open, accessible system that cat
 ## Author
 
 Aritro Bandyopadhyay
-[linkedin.cominaritro-bandyopadhyay](httpslinkedin.cominaritro-bandyopadhyay) · [github.comAriBandyo](httpsgithub.comAriBandyo)
+[linkedin.cominaritro-bandyopadhyay](https://www.linkedin.com/in/aritro-bandyopadhyay/) · [github.comAriBandyo](https://github.com/AriBandyo)
 
 ---
 
