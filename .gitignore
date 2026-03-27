@@ -2,3 +2,5 @@ build/
 *.exe
 *.o
 *.wav
+*.db 
+fingerprints.db
