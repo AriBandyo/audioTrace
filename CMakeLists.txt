@@ -7,3 +7,9 @@ pkg_check_modules(FFTW REQUIRED fftw3)
 add_executable(audiotrace main.cpp)
 target_include_directories(audiotrace PRIVATE ${SNDFILE_INCLUDE_DIRS} ${FFTW_INCLUDE_DIRS})
 target_link_libraries(audiotrace PRIVATE ${SNDFILE_LIBRARIES} ${FFTW_LIBRARIES})
+
+
+
+add_executable(match match.cpp)
+target_include_directories(match PRIVATE ${SNDFILE_INCLUDE_DIRS} ${FFTW_INCLUDE_DIRS})
+target_link_libraries(match PRIVATE ${SNDFILE_LIBRARIES} ${FFTW_LIBRARIES})

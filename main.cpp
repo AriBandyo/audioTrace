@@ -34,19 +34,20 @@ if(!f) {
     return 1;
 }
 // READ ALL THE NUMBERS 
+// buf is a temp storage that stores all the presure waves into it [L0, R0, L1, R1, L2, R2, L3, R3 ...]
 std::vector<float> buf(info.frames * info.channels);
 std::vector<Fingerprint> fingerprints;
 int fan_out = 20;
 sf_readf_float(f,buf.data(),info.frames);
 sf_close(f);
 // CONVERT THESE NUMBERS INTO MONO
-std::vector<float> mono(info.frames);
+std::vector<float> mono(info.frames); // the size of the mono is same as the that of the frames because in a very simple terms we will be find the avg(explanation is given in the read me section) so we do not need any vector bigger thn frames.
 for (int i = 0; i < info.frames ; i++){
     float s = 0;
     for(int c = 0 ; c <info.channels ; c++){
-        s += buf[i*info.channels + c];
+        s += buf[i*info.channels + c];// this calulation is done taking into the conideration of edge case that the fact that c++ reads any garbage value at that memory point.
     }
-    mono[i] = s /info.channels;
+    mono[i] = s /info.channels; // The L+R / number of channels calulation for each channel that you have specially taken care for mono sounds.
 }
 // PRINT THE INFO
 std::cout<<"Sample Rate :" <<info.samplerate<<"\n";
