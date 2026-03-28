@@ -67,18 +67,20 @@ double* in = fftw_alloc_real(N); //allocates a block of memoery to hold N real n
 
 fftw_complex* out = fftw_alloc_complex(N/2 +1);
 
-fftw_plan plan = fftw_plan_dft_r2c_1d(N, in , out , FFTW_ESTIMATE);
+fftw_plan plan = fftw_plan_dft_r2c_1d(N, in , out , FFTW_ESTIMATE); //fftw_estimatie is how hard the fft modle tries to optimise and is also replated to the speed of the loop up, estimate is instantiously.
 
 std::vector<Point> constellation;
 
 
 //looping through mono with the window created.
+//this starts at 0 then continues till the sample fits till N and thne jumps N steps.
 for ( int start = 0 ; start + N <= mono.size() ; start += N){
+    //this loops makes the mono into the what we know is samples, and stores it into "in" which is then passed to "plan" where the fft is executed .
     for( int i = 0; i< N ; i++){
         in[i] = mono[start +i];
     }
     //run cmd
-    fftw_execute(plan);
+    fftw_execute(plan);//inbuilt cmd that runs the fast fouriou trasnform.
     std::vector <std::pair<double,int>> mags;
     
    
@@ -111,6 +113,11 @@ for ( int start = 0 ; start + N <= mono.size() ; start += N){
     }
     
 }
+//clean up functions
+fftw_destroy_plan(plan);
+fftw_free(in); //use to free the allocated memory,
+fftw_free(out);//use to free the allocated memory,
+
 std::cout <<"Total constilation points :"<< constellation.size()<< "\n";
 
     for (int i = 0;  i<(int)constellation.size(); i++)
@@ -150,10 +157,6 @@ for(auto& fp : fingerprints){
 file.close();
 std::cout << "Fingerprints saved to fingerprints.db\n";
 
-//clean up functions
-fftw_destroy_plan(plan);
-fftw_free(in); //use to free the allocated memory,
-fftw_free(out);//use to free the allocated memory,
 
 return 0;
 

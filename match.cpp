@@ -57,11 +57,12 @@ fftw_plan plan = fftw_plan_dft_r2c_1d(N, in, out, FFTW_ESTIMATE);
 
 struct Point { int window; double freq; };
 std::vector<Point> constellation;
-
+//looping through mono with the window created.
 for(int start = 0; start + N <= (int)mono.size(); start += N){
     for(int i = 0; i < N; i++) in[i] = mono[start + i];
-    fftw_execute(plan);
-
+    fftw_execute(plan);//
+   //magnituted of each frequency 
+    //This also the window loop.
     std::vector<std::pair<double,int>> mags;
     for(int i = 0; i < N/2 + 1; i++){
         double real = out[i][0], imag = out[i][1];
@@ -73,7 +74,7 @@ for(int start = 0; start + N <= (int)mono.size(); start += N){
     std::sort(mags.begin(), mags.end(), [](auto& a, auto& b){
         return a.first > b.first;
     });
-
+    //gettign the top 5 peaks
     int widx = start / N;
     for(int i = 0; i < 5 && i < (int)mags.size(); i++){
         int bin = mags[i].second;
@@ -81,7 +82,7 @@ for(int start = 0; start + N <= (int)mono.size(); start += N){
         constellation.push_back({widx, freq});
     }
 }
-
+//clean up 
 fftw_destroy_plan(plan);
 fftw_free(in);
 fftw_free(out);
