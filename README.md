@@ -107,7 +107,7 @@ AudioTrace targets the gap nobody is filling an open, accessible system that cat
 - [x] Architecture design — two phase hybrid pipeline
 - [x] Phase 1 — spectrogram generation and peak extraction in C++
 - [x] Phase 1 — constellation hashing and database matching
-- [ ] Phase 1 — baseline evaluation on clean audio
+- [x] Phase 1 — baseline evaluation on clean audio
 - [ ] Phase 2 — MERT integration and projection head
 - [ ] Phase 2 — contrastive training pipeline with augmentations
 - [ ] Phase 2 — Faiss embedding index and query matching
