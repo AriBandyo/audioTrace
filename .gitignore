@@ -1,14 +1,10 @@
-# Build folder
+cd /c/Users/aritr/AudioTrace
+cat > .gitignore << 'EOF'
 build/
-
-# Generated files
 *.db
-
-# Audio files
 *.wav
 *.mp3
 *.flac
-
-# OS files
 .DS_Store
 Thumbs.db
+EOF

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include<map>
 #include<fstream>
+#include <libpq-fe.h>
 
 struct Fingerprint{
     int freq1;
@@ -21,11 +22,19 @@ struct Point{
         double freq;
     };
 
-int main () {
+int main (int argc, char* argv[]) {
+
+    if(argc < 2){
+        std::cerr << "Usage: " << argv[0] << " <audiofile>\n";
+        return 1;
+    }
 
 // OPEN THE WAV FILES
-const char* path = "test.wav"; // points the varaible "path" to the place were test.wav is located.
+const char* path = argv[1]; // points the varaible "path" to the place were test.wav is located.
+
+std::string songName = argv[1];
 //storing the format of the sound by using SF_INFO which is a struct part of library libsnfile
+
 SF_INFO info {};
 SNDFILE* f = sf_open(path, SFM_READ, &info);
 if(!f) {
@@ -141,7 +150,7 @@ std::cout <<"Total constilation points :"<< constellation.size()<< "\n";
               << ", dt="   << fingerprints[i].delta
               << ") at t=" << fingerprints[i].time << "\n";
 }
-std::ofstream file("fingerprints.db");
+/*std::ofstream file("fingerprints.db");
 if(!file){
     std::cerr << "Could not open file for writing\n";
     return 1;
@@ -155,7 +164,51 @@ for(auto& fp : fingerprints){
 }
 
 file.close();
-std::cout << "Fingerprints saved to fingerprints.db\n";
+std::cout << "Fingerprints saved to fingerprints.db\n"; */
+// SAVE TO POSTGRESQL
+PGconn* conn = PQconnectdb("host=localhost dbname=audiotrace user=aritr");
+
+if(PQstatus(conn) != CONNECTION_OK){
+    std::cerr << "Connection failed: " << PQerrorMessage(conn) << "\n";
+    PQfinish(conn);
+    return 1;
+}
+std::cout << "Connected to PostgreSQL\n";
+
+// insert song
+// NEW
+std::string insertSong = "INSERT INTO songs(name, path) VALUES('" + songName + "', '" + songName + "') RETURNING id;";
+PGresult* res = PQexec(conn, insertSong.c_str());
+if(PQresultStatus(res) != PGRES_TUPLES_OK){
+    std::cerr << "Insert failed: " << PQerrorMessage(conn) << "\n";
+    PQclear(res);
+    PQfinish(conn);
+    return 1;
+}
+int song_id = std::stoi(PQgetvalue(res, 0, 0));
+PQclear(res);
+std::cout << "Song inserted with ID: " << song_id << "\n";
+
+// insert fingerprints
+for(auto& fp : fingerprints){
+    std::string query = "INSERT INTO fingerprints(freq1, freq2, delta, t, song_id) VALUES(" +
+        std::to_string(fp.freq1) + "," +
+        std::to_string(fp.freq2) + "," +
+        std::to_string(fp.delta) + "," +
+        std::to_string(fp.time)  + "," +
+        std::to_string(song_id)  + ");";
+    PGresult* r = PQexec(conn, query.c_str());
+    if(PQresultStatus(r) != PGRES_COMMAND_OK){
+        std::cerr << "Insert failed: " << PQerrorMessage(conn) << "\n";
+        PQclear(r);
+        PQfinish(conn);
+        return 1;
+    }
+    PQclear(r);
+}
+
+std::cout << "Fingerprints saved to PostgreSQL\n";
+PQfinish(conn);
 
 
 return 0;

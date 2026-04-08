@@ -1,6 +1,6 @@
 # AudioTrace
 
-Identifying copyrighted songs from short, noisy, and deliberately manipulated audio clips — the problem Shazam cannot solve.
+AudioTrace is an audio fingerprinting system designed to identify songs from short, noisy, and manipulated audio clips (e.g., pitch shifts, time stretching, added noise).
 
 ---
 
@@ -8,7 +8,7 @@ Identifying copyrighted songs from short, noisy, and deliberately manipulated au
 
 AudioTrace is an audio fingerprinting system that detects when a copyrighted song has been used in a video, even after the audio has been deliberately pitch shifted, time stretched, or layered with noise to evade detection.
 
-Platforms like TikTok, Instagram, and YouTube lose billions in music royalties every year because users modify audio to bypass existing detection systems. Shazam fails on distorted audio. YouTube Content ID fails on pitch shifted clips. No open, accessible system exists to catch this. AudioTrace is being built to solve exactly that.
+Platforms like TikTok, Instagram, and YouTube lose billions in music royalties every year because users modify audio to bypass existing detection systems. Shazam fails on distorted audio. YouTube Content ID fails on pitch shifted clips. Existing systems struggle with heavily manipulated audio, especially under pitch shifts and time stretching. AudioTrace explores a hybrid approach to improve robustness under these conditions. AudioTrace is being built to solve exactly that.
 
 ---
 
@@ -86,18 +86,6 @@ Augmentation Time stretch, pitch shift, noise, compression, filtering
 Training data FMA (100K tracks), AudioSet, GTZAN
 
 ---
-
-## Market Context
-
-This is not an academic exercise. The problem has real commercial consequences
-
-- Vobile acquired Pex (audio content ID) in April 2025
-- Vobile launched AI Song Detector in November 2025 — but for detecting AI-generated music, not manipulation evasion. Different problem entirely
-- Universal Music Group filed lawsuits against multiple platforms over unlicensed music use in 2024
-- CISAC warned AI-generated and manipulated content could put 25% of musicians' income at risk by 2028
-- Independent artists have no accessible tool to protect themselves
-
-AudioTrace targets the gap nobody is filling an open, accessible system that catches manipulated copies of real songs on social platforms.
 
 ---
 
